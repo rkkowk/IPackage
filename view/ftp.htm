@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Ipackage_FTP</title>
+<link rel="shortcut icon" href="./favicon.ico">
+<link rel="stylesheet" href="./static/css/bootstrap.min.css" />
+<link rel="stylesheet" href="./static/css/dataTables.bootstrap4.css" />
+<link rel="stylesheet" href="./static/css/common.css">
+</head>
+<body>
+<img src="./static/images/loading.gif" alt="loading" id="loading">
+	<input type="text" class="form-control" id="basic-url"    placeholder="请输入你要检索的路径"  value="<?php echo $src ?>">
+</body>
+</html>
+<script src="./static/js/jquery.js"></script>
+<script src="./static/js/bootstrap.min.js"></script>
+<script src="./static/js/jquery.dataTables.min.js"></script>
+<script src="./static/js/dataTables.bootstrap4.min.js"></script>
+<script>
+	$(window).ajaxStart(function(){
+ 		$('body').css('cursor','wait');
+ 		$('#loading').show(0);
+ 		$('.alertred').hide(300);
+ 		$('.alertred1 ').hide(300);
+  		$('.ml').attr("disabled","disabled");
+ 	});
+
+ 	$(window).ajaxStop(function(){
+ 		$('body').css('cursor','default');
+ 		$('#loading').hide(0);
+ 		$('.ml').attr("disabled",false);
+ 	})
+</script>

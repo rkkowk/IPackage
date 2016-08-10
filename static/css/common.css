@@ -1,0 +1,26 @@
+.content{
+	/*border: 1px solid #ccc;*/
+	padding: 10px;
+	}
+.ml{
+	margin-left: 10px;
+}
+table.dataTable tbody tr.selected {
+  background-color: #B0BED9;
+}
+.progress{
+	height: 3px;
+}
+.alert{
+	width: 80%;
+}
+.alertred,.alertred1{
+	display: none;
+}
+#loading{
+	width: 20px;
+	position: absolute;
+	right: 0;
+	top: 5px;
+	display: none;
+}
