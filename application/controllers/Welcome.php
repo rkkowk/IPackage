@@ -27,11 +27,13 @@ class Welcome extends CI_Controller {
 	    //默认日期
 	    $setGt = date('Y-m-d');
 	    $setGt = ( isset($_COOKIE['gt']) && !empty($_COOKIE['gt']) )? $_COOKIE['gt'] :  strtotime($setGt);
+
 	    
-        $src = $setSrc;
-        $gt = $setGt;
-        $tar = $setTar;
-		$this->load->view('IPackage');
+        $data['src'] = $setSrc;
+        $data['gt'] = $setGt;
+        $data['tar'] = $setTar;
+        
+		$this->load->view('IPackage',$data);
 	}
 	
 	public function upload(){
