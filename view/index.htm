@@ -201,17 +201,19 @@ $().ready(function(){
 	$('#saves').click((function(event) {
 		var tar = $('#outputDir').val();
 		var str = select();
-		$.post(
-			'./api/save.php',
-			{'tar':tar,'save':'save','array':str,'tar':$('#outputDir').val()},
-			function(data){
-				var str = '';
-				for (var i = $.parseJSON(data).length - 1; i >= 0; i--) {
-					str += '<li>'+$.parseJSON(data)[i]+'</li>';
-				}
-				$('#result').append(str);
-			}	
-		)
+		if(str){
+			$.post(
+				'./api/save.php',
+				{'tar':tar,'save':'save','array':str,'tar':$('#outputDir').val()},
+				function(data){
+					var str = '';
+					for (var i = $.parseJSON(data).length - 1; i >= 0; i--) {
+						str += '<li>'+$.parseJSON(data)[i]+'</li>';
+					}
+					$('#result').append(str);
+				}	
+			)
+		}
 	}));
 
 	//全选反选
