@@ -121,7 +121,7 @@ $().ready(function(){
 		    },
 		
 		"ajax": {
-			"url": "./api/search.php",
+			"url": "./index.php/welcome/search",
 			"data": function () {
 				var src = $('#dirurl').val();
 				return {src: src,search:Boolean(switchs),'gt':$('#gt').val()};
@@ -153,7 +153,7 @@ $().ready(function(){
 	//检索子文件夹
 	$('#search').click(function(){
 		$.post(
-			'./api/show.php',
+			'./index.php/welcome/show',
 			{'show':'dir','src':$('#basic-url').val()},
 			function(data){
 				if(data != 0){
@@ -203,8 +203,8 @@ $().ready(function(){
 		var str = select();
 		if(str){
 			$.post(
-				'./api/save.php',
-				{'tar':tar,'save':'save','array':str,'tar':$('#outputDir').val()},
+				'./index.php/welcome/save',
+				{'tar':tar,'save':'save','array':str,'tar':$('#outputDir').val(),'gt':$('#gt').val(),'src':$('#dirurl').val()},
 				function(data){
 					var str = '';
 					for (var i = $.parseJSON(data).length - 1; i >= 0; i--) {
@@ -273,7 +273,7 @@ $().ready(function(){
 //	 			str = str.replace(basicUrl,'/');
 //	 		}
 	 		$.post(
-					'./api/upload.php',
+					'./index.php/welcome/upload.php',
 					{'ftp':'ftp','array':str,'local':basicUrl},
 					function(data){
 						console.log($.parseJSON(data))

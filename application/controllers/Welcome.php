@@ -3,21 +3,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Welcome extends CI_Controller {
 
-	/**
-	 * Index Page for this controller.
-	 *
-	 * Maps to the following URL
-	 * 		http://example.com/index.php/welcome
-	 *	- or -
-	 * 		http://example.com/index.php/welcome/index
-	 *	- or -
-	 * Since this controller is set as the default controller in
-	 * config/routes.php, it's displayed at http://example.com/
-	 *
-	 * So any other public methods not prefixed with an underscore will
-	 * map to /index.php/welcome/<method_name>
-	 * @see https://codeigniter.com/user_guide/general/urls.html
-	 */
 	public function index()
 	{
 	    //config
@@ -35,6 +20,28 @@ class Welcome extends CI_Controller {
         
 		$this->load->view('IPackage',$data);
 	}
+	
+	
+	
+	public function search(){
+	    if( $this->input->is_ajax_request() ){
+    	    $this->load->library('Scandir');
+	        $obj = new Scandir();
+	        if(isset($_POST['search']) && $_POST['search'] == 'true' ){
+	            $src = ( isset($_POST['src']) && !empty($_POST['src']) ) ? trim($_POST['src'],'/').'/' : $setSrc;
+	            $gt = ( isset($_POST['gt']) && !empty($_POST['gt']) ) ? strtotime($_POST['gt']) : $setGt;
+	            setcookie('gt',$gt,time()+3600*12,'/');
+	            $obj->scandirs($src ,$gt,$filesarr);
+	        }
+	        if ( empty($filesarr) || !isset($filesarr)){
+	            $filesarr = array();
+	        }else{
+	            sort($filesarr);
+	        }
+	        echo  json_encode($filesarr);
+	    }
+	}
+	
 	
 	public function upload(){
 	    if( is_ajax_request() ){
@@ -60,7 +67,7 @@ class Welcome extends CI_Controller {
 	}
 	
 	public function show(){
-	    if( is_ajax_request() ){
+	    if( $this->input->is_ajax_request() ){
 	    
 	        if(isset($_POST['show']) && $_POST['show'] == 'dir'){
 	            $src = ( isset($_POST['src']) && !empty($_POST['src']) ) ? trim($_POST['src'],'/').'/' : $setSrc;
@@ -81,27 +88,13 @@ class Welcome extends CI_Controller {
 	    }
 	}
 	
-	public function search(){
-	    if( is_ajax_request()){
-	        $obj = new Scandir();
-	        if(isset($_POST['search']) && $_POST['search'] == 'true' ){
-	            $src = ( isset($_POST['src']) && !empty($_POST['src']) ) ? trim($_POST['src'],'/').'/' : $setSrc;
-	            $gt = ( isset($_POST['gt']) && !empty($_POST['gt']) ) ? strtotime($_POST['gt']) : $setGt;
-	            setcookie('gt',$gt,time()+3600*12,'/');
-	            $obj->scandirs($src ,$gt,$filesarr);
-	        }
-	        if ( empty($filesarr) || !isset($filesarr)){
-	            $filesarr = array();
-	        }else{
-	            sort($filesarr);
-	        }
-	        echo  json_encode($filesarr);
-	    }
-	}
+
 	
 	public function save(){
-	    if(is_ajax_request()){
+	    if($this->input->is_ajax_request()){
+	        $this->load->library('Scandir');
 	        if( isset($_POST['save']) && $_POST['save'] == 'save' ){
+	            
 	            $src = ( isset($_POST['src']) && !empty($_POST['src']) ) ? trim($_POST['src'],'/').'/' : $setSrc;
 	            $gt = ( isset($_POST['gt']) && !empty($_POST['gt']) ) ? strtotime($_POST['gt']) : $setGt;
 	            $tar = ( isset($_POST['tar']) && !empty($_POST['tar']) ) ? trim($_POST['tar'],'/').'/' : $setTar;
@@ -111,6 +104,7 @@ class Welcome extends CI_Controller {
 	            $array = explode( ',',rtrim($_POST['array'],','));
 	            $result = $obj->save($array,$src ,$tar);
 	            echo json_encode($result);
+	            
 	        }
 	    }
 	}

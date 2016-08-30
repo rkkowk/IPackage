@@ -1,6 +1,5 @@
 <?php
-namespace lib;
-
+defined('BASEPATH') OR exit('No direct script access allowed');
 class Scandir
 {
     public function __construct(){
