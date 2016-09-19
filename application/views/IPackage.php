@@ -5,8 +5,8 @@
 	<title>Ipackage</title>
 </head>
 <link rel="shortcut icon" href="./favicon.ico">
-<link rel="stylesheet" href="./static/css/bootstrap.min.css" />
 <link rel="stylesheet" href="./static/css/dataTables.bootstrap4.css" />
+<link rel="stylesheet" href="./static/css/bootstrap.min.css" />
 <link rel="stylesheet" href="./static/css/common.css">
 <body>
 	<img src="./static/images/loading.gif" alt="loading" id="loading">
@@ -273,7 +273,7 @@ $().ready(function(){
 //	 			str = str.replace(basicUrl,'/');
 //	 		}
 	 		$.post(
-					'./index.php/welcome/upload.php',
+					'./index.php/welcome/upload',
 					{'ftp':'ftp','array':str,'local':basicUrl},
 					function(data){
 						console.log($.parseJSON(data))

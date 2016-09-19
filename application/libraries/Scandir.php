@@ -11,30 +11,56 @@ class Scandir
      *parma $path 路径； $gt 时间戳 大于 ； $arr 引用变量，获取结果
      * @return bool
      */
-    public function scandirs($path,$gt,&$arr){
-        $dir = scandir($path);
-        foreach ($dir as $key => $value) {
-            //过滤 . ..
-            if($value == '.' || $value == '..'){
-                continue;
-            }
-            //区分文件和文件夹
-            if( is_file($path.$value) ){
-                if( filemtime($path.$value) >= $gt || filectime($path.$value) >= $gt ){
-                    //转码
-                    $arr[$path.$value]['filename'] = iconv('GB2312', 'UTF-8', $value);
-                    $arr[$path.$value]['path'] = iconv('GB2312', 'UTF-8', $path);
-                    $arr[$path.$value]['filemtime'] = date('Y-m-d',filectime($path.$value));
+    public function scandirs($path,$gt,&$arr = array()){
+        if ($gt) {
+            $path = checkSlash($path);
+            $gt = is_int($gt) ? $gt : strtotime($gt);
+            
+            $dir = scandir($path);
+            foreach ($dir as $key => $value) {
+                // 过滤 . ..
+                if ($value == '.' || $value == '..') {
+                    continue;
                 }
-            }elseif( is_dir($path.$value) ){
-                $newpath = $path.$value.'/';
-                $this->scandirs($newpath,$gt,$arr);
+                // 区分文件和文件夹
+                if (is_file($path . $value)) {
+                    if (filemtime($path . $value) >= $gt || filectime($path . $value) >= $gt) {
+                        // 转码
+                        $arr[$path . $value]['filename'] = iconv('GB2312', 'UTF-8', $value);
+                        $arr[$path . $value]['path'] = iconv('GB2312', 'UTF-8', $path);
+                        $arr[$path . $value]['filemtime'] = date('Y-m-d', filectime($path . $value));
+                    }
+                } elseif (is_dir($path . $value)) {
+                    $newpath = checkSlash($path . $value);
+                    $this->scandirs($newpath, $gt, $arr);
+                }
             }
-        }
-        if( empty($dir) ){
-            return false;
+            if (empty($arr)) {
+                $arr = array();
+            } else {
+                // 排序
+                sort($arr);
+            }
+            if (empty($dir)) {
+                return false;
+            } else {
+                return true;
+            }
         }else{
-            return true;
+            //自带函数遍历目录并处理
+            $dir = scandir($path);
+            if( !empty($dir) ){
+                foreach ($dir as $key => $value){
+                    if( is_dir($path.$value) && $value != '.' && $value != '..' ){
+                        $dirarr [$key]['path'] = $path.$value;
+                        $dirarr [$key]['filename'] = $value;
+                    }
+                }
+                rsort($dirarr);
+                return $dirarr;
+            }else{
+                return false;
+            }
         }
     }
     /**
